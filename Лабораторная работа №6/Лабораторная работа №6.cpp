@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 using namespace std;
 
 void instruction() {
@@ -38,6 +38,7 @@ struct Tree {
 				return;
 			}
 		}
+
 		if (value >= node->param) {
 			if (node->right == nullptr) {
 				node->right = addElement(value);
@@ -78,42 +79,34 @@ struct Tree {
 	}
 
 	void remove(int value, Node* node = nullptr) {
-		bool contain = false;
 		if (node == nullptr) {
 			node = root;
-			bool contain = contains(value);
-			if (counting == 0 || !contain) { return; }
+			if (!contains(value)) { return; }
 			if (counting == 1) {
 				clear();
 				return;
 			}
-		} 
+		}
 		if (value > node->param) { remove(value, node->right); }
 		else if (value < node->param) { remove(value, node->left); }
-		else { 
-			if (node->right == nullptr && node->left == nullptr) { 
-				if (node->param < node->up->param) { node->up->left = nullptr; }
-				else { node->up->right = nullptr; }
-				delete node;
-				counting--;
-			}
-			else if (node->right != nullptr && node->left != nullptr) { 
+		else {
+			if (node->right != nullptr && node->left != nullptr) {
 				node->param = minimum(node->right);
 				remove(node->param, node->right);
 			}
-			else { 
+			else {
 				if (node == root) {
 					if (node->left == nullptr) { root = node->right; }
 					else { root = node->left; }
 					root->up = nullptr;
 				}
 				else if (node->left == nullptr) {
-					if (node->param < node->up->param) { node->up->left = node->right; }
+					if (node->up->left == node) { node->up->left = node->right; }
 					else { node->up->right = node->right; }
 				}
-				else {
-					if (node->param < node->up->param) { node->up->left = node->left; }
-					else { node->up->right = node->left; }
+				else if (node->right == nullptr) {
+					if (node->up->right == node) { node->up->right = node->left; }
+					else { node->up->left = node->left; }
 				}
 				delete node;
 				counting--;
