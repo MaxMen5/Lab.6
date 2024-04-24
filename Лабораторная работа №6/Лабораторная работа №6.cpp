@@ -103,10 +103,12 @@ struct Tree {
 				else if (node->left == nullptr) {
 					if (node->up->left == node) { node->up->left = node->right; }
 					else { node->up->right = node->right; }
+					node->right->up = node->up;
 				}
 				else if (node->right == nullptr) {
 					if (node->up->right == node) { node->up->right = node->left; }
 					else { node->up->left = node->left; }
+					node->left->up = node->up;
 				}
 				delete node;
 				counting--;
